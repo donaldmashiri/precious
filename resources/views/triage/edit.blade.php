@@ -1,0 +1,218 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="font-semibold text-xl leading-tight">
+                    <i class="fas fa-edit mr-2"></i>
+                    Edit Triage Assessment
+                </h2>
+                <p class="text-sm opacity-90 mt-1">Update triage assessment for {{ $triage->patient->user->name }}</p>
+            </div>
+            <div class="flex space-x-3">
+                <a href="{{ route('triage.show', $triage) }}" class="bg-white text-medical-primary px-4 py-2 rounded-lg hover:bg-maroon-50 transition-colors">
+                    <i class="fas fa-eye mr-2"></i>View Assessment
+                </a>
+                <a href="{{ route('triage.index') }}" class="bg-white text-medical-primary px-4 py-2 rounded-lg hover:bg-maroon-50 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+    </x-slot>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-lg card-shadow">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">
+                    <i class="fas fa-user-injured mr-2 text-medical-primary"></i>
+                    Update Triage Assessment
+                </h3>
+                <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                        <div>
+                            <p class="text-sm font-medium text-blue-900">Patient: {{ $triage->patient->user->name }}</p>
+                            <p class="text-sm text-blue-700">Patient Number: {{ $triage->patient->patient_number }}</p>
+                            <p class="text-sm text-blue-700">Originally assessed: {{ $triage->assessed_at->format('M d, Y g:i A') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ route('triage.update', $triage) }}" class="p-6">
+                @csrf
+                @method('PUT')
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Urgency Level -->
+                    <div>
+                        <label for="urgency_level" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>Urgency Level *
+                        </label>
+                        <select name="urgency_level" id="urgency_level" required class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                            <option value="">Select Urgency Level</option>
+                            <option value="critical" {{ old('urgency_level', $triage->urgency_level) == 'critical' ? 'selected' : '' }} class="text-red-600">Critical - Life threatening</option>
+                            <option value="urgent" {{ old('urgency_level', $triage->urgency_level) == 'urgent' ? 'selected' : '' }} class="text-orange-600">Urgent - Serious condition</option>
+                            <option value="semi_urgent" {{ old('urgency_level', $triage->urgency_level) == 'semi_urgent' ? 'selected' : '' }} class="text-yellow-600">Semi-urgent - Moderate condition</option>
+                            <option value="standard" {{ old('urgency_level', $triage->urgency_level) == 'standard' ? 'selected' : '' }} class="text-blue-600">Standard - Routine care</option>
+                            <option value="non_urgent" {{ old('urgency_level', $triage->urgency_level) == 'non_urgent' ? 'selected' : '' }} class="text-green-600">Non-urgent - Minor condition</option>
+                        </select>
+                        @error('urgency_level')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Pain Scale -->
+                    <div>
+                        <label for="pain_scale" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-thermometer-half mr-1"></i>Pain Scale (0-10)
+                        </label>
+                        <select name="pain_scale" id="pain_scale" class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                            <option value="">No pain reported</option>
+                            @for($i = 0; $i <= 10; $i++)
+                                <option value="{{ $i }}" {{ old('pain_scale', $triage->pain_scale) == $i ? 'selected' : '' }}>
+                                    {{ $i }} - @if($i == 0) No pain @elseif($i <= 3) Mild @elseif($i <= 6) Moderate @elseif($i <= 9) Severe @else Worst possible @endif
+                                </option>
+                            @endfor
+                        </select>
+                        @error('pain_scale')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Chief Complaint -->
+                <div class="mt-6">
+                    <label for="chief_complaint" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-comment-medical mr-1"></i>Chief Complaint *
+                    </label>
+                    <textarea name="chief_complaint" id="chief_complaint" rows="3" required
+                              placeholder="Primary reason for the patient's visit..."
+                              class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">{{ old('chief_complaint', $triage->chief_complaint) }}</textarea>
+                    @error('chief_complaint')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Symptoms Description -->
+                <div class="mt-6">
+                    <label for="symptoms_description" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-list-ul mr-1"></i>Symptoms Description *
+                    </label>
+                    <textarea name="symptoms_description" id="symptoms_description" rows="4" required
+                              placeholder="Detailed description of symptoms..."
+                              class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">{{ old('symptoms_description', $triage->symptoms_description) }}</textarea>
+                    @error('symptoms_description')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Vital Signs -->
+                <div class="mt-6">
+                    <h4 class="text-md font-medium text-gray-900 mb-4">
+                        <i class="fas fa-heartbeat mr-2 text-medical-primary"></i>Vital Signs
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label for="blood_pressure" class="block text-sm font-medium text-gray-700 mb-1">Blood Pressure</label>
+                            <input type="text" name="vital_signs[blood_pressure]" id="blood_pressure" 
+                                   placeholder="120/80" 
+                                   value="{{ old('vital_signs.blood_pressure', $triage->vital_signs['blood_pressure'] ?? '') }}"
+                                   class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="heart_rate" class="block text-sm font-medium text-gray-700 mb-1">Heart Rate (BPM)</label>
+                            <input type="number" name="vital_signs[heart_rate]" id="heart_rate" 
+                                   placeholder="72" min="30" max="200" 
+                                   value="{{ old('vital_signs.heart_rate', $triage->vital_signs['heart_rate'] ?? '') }}"
+                                   class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="temperature" class="block text-sm font-medium text-gray-700 mb-1">Temperature (°C)</label>
+                            <input type="number" name="vital_signs[temperature]" id="temperature" 
+                                   placeholder="36.5" step="0.1" min="30" max="45" 
+                                   value="{{ old('vital_signs.temperature', $triage->vital_signs['temperature'] ?? '') }}"
+                                   class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="respiratory_rate" class="block text-sm font-medium text-gray-700 mb-1">Respiratory Rate</label>
+                            <input type="number" name="vital_signs[respiratory_rate]" id="respiratory_rate" 
+                                   placeholder="16" min="8" max="40" 
+                                   value="{{ old('vital_signs.respiratory_rate', $triage->vital_signs['respiratory_rate'] ?? '') }}"
+                                   class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="oxygen_saturation" class="block text-sm font-medium text-gray-700 mb-1">Oxygen Saturation (%)</label>
+                            <input type="number" name="vital_signs[oxygen_saturation]" id="oxygen_saturation" 
+                                   placeholder="98" min="70" max="100" 
+                                   value="{{ old('vital_signs.oxygen_saturation', $triage->vital_signs['oxygen_saturation'] ?? '') }}"
+                                   class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="medical_history_notes" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-history mr-1"></i>Relevant Medical History
+                        </label>
+                        <textarea name="medical_history_notes" id="medical_history_notes" rows="3"
+                                  placeholder="Any relevant medical history..."
+                                  class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">{{ old('medical_history_notes', $triage->medical_history_notes) }}</textarea>
+                    </div>
+
+                    <div>
+                        <label for="recommended_department" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-building mr-1"></i>Recommended Department
+                        </label>
+                        <select name="recommended_department" id="recommended_department" class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                            <option value="">Select Department</option>
+                            <option value="Emergency Medicine" {{ old('recommended_department', $triage->recommended_department) == 'Emergency Medicine' ? 'selected' : '' }}>Emergency Medicine</option>
+                            <option value="Cardiology" {{ old('recommended_department', $triage->recommended_department) == 'Cardiology' ? 'selected' : '' }}>Cardiology</option>
+                            <option value="Pediatrics" {{ old('recommended_department', $triage->recommended_department) == 'Pediatrics' ? 'selected' : '' }}>Pediatrics</option>
+                            <option value="Orthopedics" {{ old('recommended_department', $triage->recommended_department) == 'Orthopedics' ? 'selected' : '' }}>Orthopedics</option>
+                            <option value="Internal Medicine" {{ old('recommended_department', $triage->recommended_department) == 'Internal Medicine' ? 'selected' : '' }}>Internal Medicine</option>
+                            <option value="Surgery" {{ old('recommended_department', $triage->recommended_department) == 'Surgery' ? 'selected' : '' }}>Surgery</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Immediate Attention -->
+                <div class="mt-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="requires_immediate_attention" id="requires_immediate_attention" value="1"
+                               {{ old('requires_immediate_attention', $triage->requires_immediate_attention) ? 'checked' : '' }}
+                               class="rounded border-gray-300 text-medical-primary focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                        <label for="requires_immediate_attention" class="ml-2 text-sm font-medium text-gray-700">
+                            <i class="fas fa-exclamation-circle mr-1 text-red-500"></i>
+                            Requires immediate medical attention
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Triage Notes -->
+                <div class="mt-6">
+                    <label for="triage_notes" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-sticky-note mr-1"></i>Triage Notes
+                    </label>
+                    <textarea name="triage_notes" id="triage_notes" rows="3"
+                              placeholder="Additional notes and observations..."
+                              class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">{{ old('triage_notes', $triage->triage_notes) }}</textarea>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-8 flex justify-end space-x-4">
+                    <a href="{{ route('triage.show', $triage) }}" 
+                       class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" 
+                            class="px-6 py-2 bg-medical-primary text-white rounded-lg hover:bg-medical-secondary transition-colors">
+                        <i class="fas fa-save mr-2"></i>
+                        Update Assessment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</x-app-layout>
