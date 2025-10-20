@@ -12,20 +12,17 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
         <!-- Styles / Scripts -->
-        @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @else
-            <style>
-                .medical-primary { background-color: #800020; }
-                .text-medical-primary { color: #800020; }
-                .bg-medical-primary { background-color: #800020; }
-                .hover\:bg-medical-secondary:hover { background-color: #a0002a; }
-                .border-medical-primary { border-color: #800020; }
-                .from-maroon-50 { --tw-gradient-from: #fdf2f8; }
-                .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-            </style>
-            <script src="https://cdn.tailwindcss.com"></script>
-        @endif
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <style>
+            .medical-primary { background-color: #800020; }
+            .text-medical-primary { color: #800020; }
+            .bg-medical-primary { background-color: #800020; }
+            .hover\:bg-medical-secondary:hover { background-color: #a0002a; }
+            .border-medical-primary { border-color: #800020; }
+            .from-maroon-50 { --tw-gradient-from: #fdf2f8; }
+            .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        </style>
     </head>
     <body class="font-sans antialiased bg-gradient-to-br from-red-50 to-white">
         <!-- Navigation -->
