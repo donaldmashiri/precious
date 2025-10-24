@@ -41,6 +41,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Doctor routes (for staff/admin)
     Route::resource('doctors', DoctorController::class)->middleware('can:manage-doctors');
     
+    // Doctor availability management (for admin)
+    Route::middleware(['auth', 'verified', 'web'])->group(function () {
+        Route::get('/doctors-availability', [DoctorController::class, 'availability'])->name('doctors.availability');
+        Route::post('/doctors/{doctor}/toggle-availability', [DoctorController::class, 'toggleAvailability'])->name('doctors.toggle-availability');
+    });
+    
     // Hospital routes (for admin)
     Route::resource('hospitals', HospitalController::class)->middleware('can:manage-hospitals');
     

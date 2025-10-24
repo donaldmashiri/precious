@@ -84,6 +84,9 @@
                         </label>
                         <select name="doctor_id" id="doctor_id" required class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
                             <option value="">Select Doctor</option>
+                            @foreach($doctors as $doctor)
+                                <option value="{{ $doctor->id }}">{{ $doctor->user->name }}</option>
+                            @endforeach
                         </select>
                         @error('doctor_id')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -112,7 +115,7 @@
                         <label for="appointment_date" class="block text-sm font-medium text-gray-700 mb-2">
                             <i class="fas fa-calendar mr-1"></i>Date *
                         </label>
-                        <input type="date" name="appointment_date" id="appointment_date" required 
+                        <input type="date" name="appointment_date" id="appointment_date" required
                                min="{{ date('Y-m-d', strtotime('+1 day')) }}"
                                class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
                         @error('appointment_date')
@@ -127,6 +130,15 @@
                         </label>
                         <select name="time_slot" id="time_slot" required class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
                             <option value="">Select Time</option>
+                            <option value="9:00 AM">9:00 AM</option>
+                            <option value="10:00 AM">10:00 AM</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="12:00 PM">12:00 PM</option>
+                            <option value="1:00 PM">1:00 PM</option>
+                            <option value="2:00 PM">2:00 PM</option>
+                            <option value="3:00 PM">3:00 PM</option>
+                            <option value="4:00 PM">4:00 PM</option>
+                            <option value="5:00 PM">5:00 PM</option>
                         </select>
                         @error('time_slot')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -162,11 +174,11 @@
 
                 <!-- Action Buttons -->
                 <div class="mt-8 flex justify-end space-x-4">
-                    <a href="{{ route('appointments.index') }}" 
+                    <a href="{{ route('appointments.index') }}"
                        class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                         Cancel
                     </a>
-                    <button type="submit" 
+                    <button type="submit"
                             class="px-6 py-2 bg-medical-primary text-white rounded-lg hover:bg-medical-secondary transition-colors">
                         <i class="fas fa-calendar-check mr-2"></i>
                         Book Appointment
@@ -223,7 +235,7 @@
             function loadTimeSlots() {
                 const doctorId = doctorSelect.value;
                 const date = dateInput.value;
-                
+
                 timeSlotSelect.innerHTML = '<option value="">Select Time</option>';
 
                 if (doctorId && date) {
@@ -244,7 +256,7 @@
             timeSlotSelect.addEventListener('change', function() {
                 const date = dateInput.value;
                 const time = this.value;
-                
+
                 if (date && time) {
                     const appointmentDateTime = `${date} ${time}`;
                     // Create a hidden input for the full datetime

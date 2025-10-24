@@ -14,8 +14,42 @@
 
         <!-- Scripts -->
         <!-- Replaced Vite with CDNs -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.css" rel="stylesheet" />
+        
         <script src="https://cdn.tailwindcss.com"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+        
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            maroon: {
+                                50: '#fdf2f2',
+                                100: '#fce7e7',
+                                200: '#f9d2d2',
+                                300: '#f4b1b1',
+                                400: '#ec8484',
+                                500: '#e05c5c',
+                                600: '#cc3f3f',
+                                700: '#a83232',
+                                800: '#8b2e2e',
+                                900: '#722c2c',
+                                950: '#3e1414',
+                            },
+                            medical: {
+                                primary: '#722c2c',
+                                secondary: '#8b2e2e',
+                                accent: '#a83232',
+                                light: '#f9d2d2',
+                                dark: '#3e1414',
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gradient-to-br from-red-50 to-white">
         <!-- Header with Logo -->
@@ -32,21 +66,18 @@
                             <p class="text-xs text-gray-600 leading-tight">Scheduling System</p>
                         </div>
                     </a>
-                    
+
                     <nav class="flex items-center space-x-6">
-                        <a href="/" 
-                           class="px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-700"
-                           style="hover:color: #800020;">
+                        <a href="/"
+                           class="px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-700 hover:text-medical-primary">
                             <i class="fas fa-home mr-2"></i>Home
                         </a>
-                        <a href="{{ route('login') }}" 
-                           class="px-4 py-2 rounded-md text-sm font-medium transition-colors border text-gray-700"
-                           style="border-color: #800020; hover:color: #800020; hover:border-color: #a0002a;">
+                        <a href="{{ route('login') }}"
+                           class="px-4 py-2 rounded-md text-sm font-medium transition-colors border border-medical-primary text-gray-700 hover:text-medical-primary hover:border-medical-accent">
                             <i class="fas fa-sign-in-alt mr-2"></i>Sign In
                         </a>
-                        <a href="{{ route('register') }}" 
-                           class="text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                           style="background: linear-gradient(135deg, #800020 0%, #a0002a 100%);">
+                        <a href="{{ route('register') }}"
+                           class="bg-medical-primary hover:bg-medical-secondary text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                             <i class="fas fa-user-plus mr-2"></i>Register
                         </a>
                     </nav>
@@ -59,5 +90,7 @@
                 {{ $slot }}
             </div>
         </div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.js"></script>
     </body>
 </html>

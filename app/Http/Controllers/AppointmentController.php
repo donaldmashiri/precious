@@ -43,8 +43,8 @@ class AppointmentController extends Controller
     {
         $hospitals = Hospital::where('is_active', true)->get();
         $departments = Department::where('is_active', true)->get();
-        $doctors = Doctor::where('is_available', true)->with('user')->get();
-        
+         $doctors = Doctor::all();
+
         return view('appointments.create', compact('hospitals', 'departments', 'doctors'));
     }
 
@@ -64,7 +64,7 @@ class AppointmentController extends Controller
         // Check doctor availability
         $doctor = Doctor::find($validated['doctor_id']);
         $appointmentDate = Carbon::parse($validated['appointment_date']);
-        
+
         $existingAppointments = $doctor->appointments()
             ->whereDate('appointment_date', $appointmentDate->toDateString())
             ->count();
@@ -103,7 +103,7 @@ class AppointmentController extends Controller
         $hospitals = Hospital::where('is_active', true)->get();
         $departments = Department::where('is_active', true)->get();
         $doctors = Doctor::where('is_available', true)->with('user')->get();
-        
+
         return view('appointments.edit', compact('appointment', 'hospitals', 'departments', 'doctors'));
     }
 
@@ -179,7 +179,7 @@ class AppointmentController extends Controller
     {
         $doctorId = $request->doctor_id;
         $date = $request->date;
-        
+
         $doctor = Doctor::find($doctorId);
         if (!$doctor) {
             return response()->json(['slots' => []]);
@@ -195,7 +195,7 @@ class AppointmentController extends Controller
         $slots = [];
         $start = Carbon::parse($doctor->shift_start);
         $end = Carbon::parse($doctor->shift_end);
-        
+
         while ($start < $end) {
             $timeSlot = $start->format('H:i');
             if (!$existingAppointments->contains($timeSlot)) {

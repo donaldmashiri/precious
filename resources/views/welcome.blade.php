@@ -12,16 +12,48 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
         <!-- Styles / Scripts -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.css" rel="stylesheet" />
         <script src="https://cdn.tailwindcss.com"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            maroon: {
+                                50: '#fdf2f2',
+                                100: '#fce7e7',
+                                200: '#f9d2d2',
+                                300: '#f4b1b1',
+                                400: '#ec8484',
+                                500: '#e05c5c',
+                                600: '#cc3f3f',
+                                700: '#a83232',
+                                800: '#8b2e2e',
+                                900: '#722c2c',
+                                950: '#3e1414',
+                            },
+                            medical: {
+                                primary: '#722c2c',
+                                secondary: '#8b2e2e',
+                                accent: '#a83232',
+                                light: '#f9d2d2',
+                                dark: '#3e1414',
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+        
         <style>
-            .medical-primary { background-color: #800020; }
-            .text-medical-primary { color: #800020; }
-            .bg-medical-primary { background-color: #800020; }
-            .hover\:bg-medical-secondary:hover { background-color: #a0002a; }
-            .border-medical-primary { border-color: #800020; }
-            .from-maroon-50 { --tw-gradient-from: #fdf2f8; }
-            .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+            .gradient-bg {
+                background: linear-gradient(135deg, #800020 0%, #a0002a 50%, #c0002f 100%);
+            }
+            .card-shadow {
+                box-shadow: 0 4px 6px -1px rgba(128, 0, 32, 0.1), 0 2px 4px -1px rgba(128, 0, 32, 0.06);
+            }
         </style>
     </head>
     <body class="font-sans antialiased bg-gradient-to-br from-red-50 to-white">
@@ -51,25 +83,21 @@
                         <div class="flex items-center space-x-6">
                             @auth
                                 <a href="{{ url('/dashboard') }}" 
-                                   class="text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                                   style="background: linear-gradient(135deg, #800020 0%, #a0002a 100%); hover:background: linear-gradient(135deg, #a0002a 0%, #800020 100%);">
+                                   class="bg-medical-primary hover:bg-medical-secondary text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                     <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
                                 </a>
                             @else
                                 <a href="#features" 
-                                   class="px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-700"
-                                   style="hover:color: #800020;">
+                                   class="px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-700 hover:text-medical-primary">
                                     Features
                                 </a>
                                 <a href="{{ route('login') }}" 
-                                   class="px-4 py-2 rounded-md text-sm font-medium transition-colors border text-gray-700"
-                                   style="border-color: #800020; hover:color: #800020; hover:border-color: #a0002a;">
+                                   class="px-4 py-2 rounded-md text-sm font-medium transition-colors border border-medical-primary text-gray-700 hover:text-medical-primary hover:border-medical-accent">
                                     <i class="fas fa-sign-in-alt mr-2"></i>Sign In
                                 </a>
                                 @if (Route::has('register'))
                                     <a href="{{ route('register') }}" 
-                                       class="text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                                       style="background: linear-gradient(135deg, #800020 0%, #a0002a 100%);">
+                                       class="bg-medical-primary hover:bg-medical-secondary text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                                         <i class="fas fa-user-plus mr-2"></i>Get Started
                                     </a>
                                 @endif
@@ -105,23 +133,20 @@
                             <div class="mt-8 flex flex-col sm:flex-row gap-4">
                                 @auth
                                     <a href="{{ url('/dashboard') }}" 
-                                       class="flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
-                                       style="background: linear-gradient(135deg, #800020 0%, #a0002a 100%);">
+                                       class="flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg text-white bg-medical-primary hover:bg-medical-secondary shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
                                         <i class="fas fa-tachometer-alt mr-2"></i>
                                         Go to Dashboard
                                     </a>
                                 @else
                                     <a href="{{ route('register') }}" 
-                                       class="flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200"
-                                       style="background: linear-gradient(135deg, #800020 0%, #a0002a 100%);">
+                                       class="flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg text-white bg-medical-primary hover:bg-medical-secondary shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200">
                                         <i class="fas fa-rocket mr-2"></i>
                                         Get Started
                                     </a>
                                 @endauth
                                 
                                 <a href="#features" 
-                                   class="flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg border-2 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200"
-                                   style="color: #800020; border-color: #800020; background-color: rgba(128, 0, 32, 0.05);">
+                                   class="flex items-center justify-center px-8 py-4 text-base font-medium rounded-lg border-2 border-medical-primary text-medical-primary hover:bg-medical-light hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200">
                                     <i class="fas fa-info-circle mr-2"></i>
                                     Learn More
                                 </a>
@@ -344,5 +369,7 @@
                 </div>
             </div>
         </footer>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/3.1.2/flowbite.min.js"></script>
     </body>
 </html>

@@ -18,6 +18,20 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    
+                    <x-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.*')">
+                        {{ __('Appointments') }}
+                    </x-nav-link>
+                    
+                    <x-nav-link :href="route('doctors.index')" :active="request()->routeIs('doctors.index') || request()->routeIs('doctors.show')">
+                        {{ __('Doctors') }}
+                    </x-nav-link>
+                    
+                    @if(Auth::user()->role === 'admin')
+                    <x-nav-link :href="route('doctors.availability')" :active="request()->routeIs('doctors.availability')">
+                        {{ __('Doctor Availability') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -73,6 +87,20 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('appointments.index')" :active="request()->routeIs('appointments.*')">
+                {{ __('Appointments') }}
+            </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('doctors.index')" :active="request()->routeIs('doctors.index') || request()->routeIs('doctors.show')">
+                {{ __('Doctors') }}
+            </x-responsive-nav-link>
+            
+            @if(Auth::user()->role === 'admin')
+            <x-responsive-nav-link :href="route('doctors.availability')" :active="request()->routeIs('doctors.availability')">
+                {{ __('Doctor Availability') }}
+            </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
