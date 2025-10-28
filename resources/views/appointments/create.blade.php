@@ -28,7 +28,7 @@
                 @csrf
 
                 <!-- Patient Selection (if staff/admin) -->
-                @if(Auth::user()->isStaff())
+                @if(Auth::user()->role !== 'patient')
                 <div class="mb-6">
                     <label for="patient_id" class="block text-sm font-medium text-gray-700 mb-2">
                         <i class="fas fa-user-injured mr-1"></i>Patient *
@@ -43,8 +43,11 @@
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-                @else
-                <input type="hidden" name="patient_id" value="{{ Auth::user()->patient->id ?? '' }}">
+                @endif
+                
+                <!-- Hidden patient_id for patient users - will be auto-set in controller -->
+                @if(Auth::user()->role === 'patient')
+                <!-- Patient ID will be automatically set by the controller -->
                 @endif
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -79,15 +82,28 @@
 
                     <!-- Doctor Selection -->
                     <div>
-                        <label for="doctor_id" class="block text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-user-md mr-1"></i>Doctor *
-                        </label>
-                        <select name="doctor_id" id="doctor_id" required class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
-                            <option value="">Select Doctor</option>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="doctor_id" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-user-md mr-1"></i>Doctor
+                            </label>
+                            <label class="flex items-center text-sm text-gray-600">
+                                <input type="checkbox" name="auto_assign_doctor" id="auto_assign_doctor" value="1" 
+                                       class="rounded border-gray-300 text-medical-primary focus:ring-medical-primary mr-2">
+                                <span class="text-xs">Auto-assign nearest available doctor</span>
+                            </label>
+                        </div>
+                        <select name="doctor_id" id="doctor_id" class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
+                            <option value="">Select Doctor (or use auto-assign)</option>
                             @foreach($doctors as $doctor)
-                                <option value="{{ $doctor->id }}">{{ $doctor->user->name }}</option>
+                                <option value="{{ $doctor->id }}" data-department="{{ $doctor->department_id }}" data-hospital="{{ $doctor->department->hospital_id }}">
+                                    {{ $doctor->user->name }} - {{ $doctor->specialization }} ({{ $doctor->department->hospital->name }})
+                                </option>
                             @endforeach
                         </select>
+                        <p class="mt-1 text-xs text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Check "Auto-assign" to let the system find the best available doctor based on your selected department and hospital
+                        </p>
                         @error('doctor_id')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -195,6 +211,19 @@
             const doctorSelect = document.getElementById('doctor_id');
             const dateInput = document.getElementById('appointment_date');
             const timeSlotSelect = document.getElementById('time_slot');
+            const autoAssignCheckbox = document.getElementById('auto_assign_doctor');
+            
+            // Handle auto-assign checkbox
+            autoAssignCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    doctorSelect.disabled = true;
+                    doctorSelect.value = '';
+                    doctorSelect.classList.add('bg-gray-100');
+                } else {
+                    doctorSelect.disabled = false;
+                    doctorSelect.classList.remove('bg-gray-100');
+                }
+            });
 
             // Load departments when hospital is selected
             hospitalSelect.addEventListener('change', function() {

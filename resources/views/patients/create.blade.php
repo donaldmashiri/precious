@@ -38,6 +38,7 @@
                                 <i class="fas fa-user mr-1"></i>Full Name *
                             </label>
                             <input type="text" name="name" id="name" required value="{{ old('name') }}"
+                                   pattern="[A-Za-z\s]+" title="Name should only contain letters and spaces"
                                    class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -60,6 +61,7 @@
                                 <i class="fas fa-phone mr-1"></i>Phone Number *
                             </label>
                             <input type="tel" name="phone" id="phone" required value="{{ old('phone') }}"
+                                   pattern="[0-9+\-\s()]+" title="Phone number should only contain numbers, +, -, spaces, and parentheses"
                                    class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
                             @error('phone')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -129,6 +131,7 @@
                                 <i class="fas fa-user mr-1"></i>Contact Name *
                             </label>
                             <input type="text" name="emergency_contact_name" id="emergency_contact_name" required value="{{ old('emergency_contact_name') }}"
+                                   pattern="[A-Za-z\s]+" title="Name should only contain letters and spaces"
                                    class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
                             @error('emergency_contact_name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -140,6 +143,7 @@
                                 <i class="fas fa-phone mr-1"></i>Contact Phone *
                             </label>
                             <input type="tel" name="emergency_contact_phone" id="emergency_contact_phone" required value="{{ old('emergency_contact_phone') }}"
+                                   pattern="[0-9+\-\s()]+" title="Phone number should only contain numbers, +, -, spaces, and parentheses"
                                    class="w-full rounded-lg border-gray-300 focus:border-medical-primary focus:ring focus:ring-medical-primary focus:ring-opacity-50">
                             @error('emergency_contact_phone')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -311,4 +315,36 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent numbers in name fields
+            const nameFields = ['name', 'emergency_contact_name'];
+            nameFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('keypress', function(e) {
+                        const char = String.fromCharCode(e.which);
+                        if (!/[A-Za-z\s]/.test(char)) {
+                            e.preventDefault();
+                        }
+                    });
+                }
+            });
+            
+            // Prevent letters in phone fields
+            const phoneFields = ['phone', 'emergency_contact_phone'];
+            phoneFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('keypress', function(e) {
+                        const char = String.fromCharCode(e.which);
+                        if (!/[0-9+\-\s()]/.test(char)) {
+                            e.preventDefault();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </x-app-layout>

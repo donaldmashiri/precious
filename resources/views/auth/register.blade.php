@@ -74,7 +74,7 @@
                 <i class="fas fa-user mr-2 text-medical-primary"></i>
                 {{ __('Full Name') }} *
             </x-input-label>
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Enter your full name" />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Enter your full name" pattern="[A-Za-z\s]+" title="Name should only contain letters and spaces" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
@@ -94,7 +94,7 @@
                 <i class="fas fa-phone mr-2 text-medical-primary"></i>
                 {{ __('Phone Number') }} *
             </x-input-label>
-            <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')" required placeholder="Enter your phone number" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')" required placeholder="Enter your phone number" pattern="[0-9+\-\s()]+" title="Phone number should only contain numbers, +, -, spaces, and parentheses" />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
@@ -194,6 +194,24 @@
             
             // Initial selection update
             updateSelection();
+            
+            // Prevent numbers in name field
+            const nameInput = document.getElementById('name');
+            nameInput.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+                if (!/[A-Za-z\s]/.test(char)) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Prevent letters in phone field
+            const phoneInput = document.getElementById('phone');
+            phoneInput.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+                if (!/[0-9+\-\s()]/.test(char)) {
+                    e.preventDefault();
+                }
+            });
         });
     </script>
 </x-guest-layout>

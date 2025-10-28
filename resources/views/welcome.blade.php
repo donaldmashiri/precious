@@ -54,6 +54,80 @@
             .card-shadow {
                 box-shadow: 0 4px 6px -1px rgba(128, 0, 32, 0.1), 0 2px 4px -1px rgba(128, 0, 32, 0.06);
             }
+            
+            /* Form input borders - make all inputs clearly visible */
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="tel"],
+            input[type="number"],
+            input[type="date"],
+            input[type="time"],
+            input[type="datetime-local"],
+            input[type="url"],
+            input[type="search"],
+            select,
+            textarea {
+                border: 2px solid #d1d5db !important;
+                border-radius: 0.5rem;
+                padding: 0.625rem 0.875rem;
+                transition: all 0.2s;
+            }
+            
+            input[type="text"]:focus,
+            input[type="email"]:focus,
+            input[type="password"]:focus,
+            input[type="tel"]:focus,
+            input[type="number"]:focus,
+            input[type="date"]:focus,
+            input[type="time"]:focus,
+            input[type="datetime-local"]:focus,
+            input[type="url"]:focus,
+            input[type="search"]:focus,
+            select:focus,
+            textarea:focus {
+                border-color: #722c2c !important;
+                box-shadow: 0 0 0 3px rgba(114, 44, 44, 0.1) !important;
+                outline: none;
+            }
+            
+            input[type="text"]:hover,
+            input[type="email"]:hover,
+            input[type="password"]:hover,
+            input[type="tel"]:hover,
+            input[type="number"]:hover,
+            input[type="date"]:hover,
+            input[type="time"]:hover,
+            input[type="datetime-local"]:hover,
+            input[type="url"]:hover,
+            input[type="search"]:hover,
+            select:hover,
+            textarea:hover {
+                border-color: #9ca3af !important;
+            }
+            
+            /* Disabled inputs */
+            input:disabled,
+            select:disabled,
+            textarea:disabled {
+                background-color: #f3f4f6 !important;
+                border-color: #e5e7eb !important;
+                cursor: not-allowed;
+            }
+            
+            /* Checkbox and radio buttons */
+            input[type="checkbox"],
+            input[type="radio"] {
+                border: 2px solid #d1d5db !important;
+                width: 1.125rem;
+                height: 1.125rem;
+            }
+            
+            input[type="checkbox"]:checked,
+            input[type="radio"]:checked {
+                background-color: #722c2c !important;
+                border-color: #722c2c !important;
+            }
         </style>
     </head>
     <body class="font-sans antialiased bg-gradient-to-br from-red-50 to-white">
